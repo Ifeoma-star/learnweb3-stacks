@@ -34,13 +34,15 @@ trait-practice/
 Traits in Clarity are like **templates** or **interfaces** for smart contracts. They define a set of functions that a contract must implement to be compliant with that trait.
 
 Think of traits as:
+
 - **Interfaces** in Solidity
-- **Traits** in Rust  
+- **Traits** in Rust
 - **Protocols** in Swift
 
 ### Why Use Traits?
 
 Traits ensure **compatibility** and **standardization** across contracts. For example:
+
 - A DEX can work with any SIP-010 token
 - A wallet can display any token that implements the standard
 - Developers know what functions are available
@@ -57,6 +59,7 @@ Traits ensure **compatibility** and **standardization** across contracts. For ex
 ### 1. Simple Trait Example
 
 **Define a trait** (`multiplier-trait.clar`):
+
 ```clarity
 (define-trait multiplier
     (
@@ -66,6 +69,7 @@ Traits ensure **compatibility** and **standardization** across contracts. For ex
 ```
 
 **Implement the trait** (`simple-calculator.clar`):
+
 ```clarity
 (define-read-only (multiply (a uint) (b uint))
     (ok (* a b))
@@ -100,6 +104,7 @@ A contract can implement multiple traits and have extra functions:
 ### 3. SIP-010 Fungible Token
 
 **Clarity Coin** is a complete SIP-010 implementation with:
+
 - ✅ Unlimited supply
 - ✅ Owner-only minting
 - ✅ Transferable tokens
@@ -107,6 +112,7 @@ A contract can implement multiple traits and have extra functions:
 - ✅ Full metadata support
 
 Key features:
+
 ```clarity
 ;; Create a fungible token
 (define-fungible-token clarity-coin)
@@ -158,6 +164,7 @@ npm test -- advanced-calculator.test.ts
 ## 🧪 Testing Highlights
 
 ### Clarity Coin Tests
+
 - ✅ Token metadata (name, symbol, decimals)
 - ✅ Minting (owner-only restrictions)
 - ✅ Transfers (authorization checks)
@@ -166,6 +173,7 @@ npm test -- advanced-calculator.test.ts
 - ✅ Memo attachments
 
 ### Calculator Tests
+
 - ✅ Trait compliance verification
 - ✅ Multiple trait implementation
 - ✅ Arithmetic operations
@@ -179,15 +187,15 @@ SIP-010 is the **fungible token standard** on Stacks - similar to ERC-20 on Ethe
 
 ### Required Functions
 
-| Function | Purpose |
-|----------|---------|
-| `transfer` | Move tokens between addresses |
-| `get-name` | Token name (e.g., "Clarity Coin") |
-| `get-symbol` | Token symbol (e.g., "CC") |
-| `get-decimals` | Decimal precision |
-| `get-balance` | Check address balance |
-| `get-total-supply` | Get total circulating supply |
-| `get-token-uri` | Optional metadata URI |
+| Function           | Purpose                           |
+| ------------------ | --------------------------------- |
+| `transfer`         | Move tokens between addresses     |
+| `get-name`         | Token name (e.g., "Clarity Coin") |
+| `get-symbol`       | Token symbol (e.g., "CC")         |
+| `get-decimals`     | Decimal precision                 |
+| `get-balance`      | Check address balance             |
+| `get-total-supply` | Get total circulating supply      |
+| `get-token-uri`    | Optional metadata URI             |
 
 ### Built-in Helpers
 
@@ -238,18 +246,21 @@ Clarity provides built-in functions for fungible tokens:
 ## 🔗 Key Concepts Recap
 
 ### Traits
+
 - Define function signatures, not implementations
 - Enforce minimum requirements
 - Enable contract compatibility
 - Similar to interfaces in other languages
 
 ### SIP-010 Tokens
+
 - Standard for fungible tokens on Stacks
 - Like ERC-20 on Ethereum
 - Use `define-fungible-token` for easy implementation
 - Built-in balance tracking and transfer functions
 
 ### sBTC
+
 - Bitcoin on Stacks via SIP-010
 - 1:1 peg with BTC
 - Enables Bitcoin DeFi
@@ -266,6 +277,7 @@ Clarity provides built-in functions for fungible tokens:
 ## 🤝 Contributing
 
 This is a learning project from the Stacks Developer Degree curriculum. Feel free to:
+
 - Add more trait examples
 - Create additional token features
 - Improve test coverage
@@ -277,4 +289,4 @@ MIT License - Feel free to use for learning and building!
 
 ---
 
-*Part of the LearnWeb3 Stacks Developer Degree*
+_Part of the LearnWeb3 Stacks Developer Degree_

@@ -145,3 +145,72 @@
         (ok balance)
     )
 )
+
+;; Get hash of stream
+(define-read-only (hash-stream
+        (stream-id uint)
+        (new-payment-per-block uint)
+        (new-timeframe {
+            start-block: uint,
+            stop-block: uint,
+        })
+    )
+    (let (
+            (stream (unwrap! (map-get? streams stream-id) (sha256 0)))
+            (msg (concat
+                (concat (unwrap-panic (to-consensus-buff? stream))
+                    (unwrap-panic (to-consensus-buff? new-payment-per-block))
+                )
+                (unwrap-panic (to-consensus-buff? new-timeframe))
+            ))
+        )
+        (sha256 msg)
+    )
+)
+
+;; Signature verification
+(define-read-only (validate-signature
+        (hash (buff 32))
+        (signature (buff 65))
+        (signer principal)
+    )
+    (is-eq (principal-of? (unwrap! (secp256k1-recover? hash signature) false))
+        (ok signer)
+    )
+)
+
+;; Update stream configuration
+(define-public (update-details
+        (stream-id uint)
+        (payment-per-block uint)
+        (timeframe {
+            start-block: uint,
+            stop-block: uint,
+        })
+        (signer principal)
+        (signature (buff 65))
+    )
+    (let ((stream (unwrap! (map-get? streams stream-id) ERR_INVALID_STREAM_ID)))
+        (asserts!
+            (validate-signature
+                (hash-stream stream-id payment-per-block timeframe)
+                signature signer
+            )
+            ERR_INVALID_SIGNATURE
+        )
+        (asserts!
+            (or
+                (and (is-eq (get sender stream) contract-caller) (is-eq (get recipient stream) signer))
+                (and (is-eq (get sender stream) signer) (is-eq (get recipient stream) contract-caller))
+            )
+            ERR_UNAUTHORIZED
+        )
+        (map-set streams stream-id
+            (merge stream {
+                payment-per-block: payment-per-block,
+                timeframe: timeframe,
+            })
+        )
+        (ok true)
+    )
+)

@@ -68,3 +68,47 @@
         (ok amount)
     )
 )
+
+;; Calculate the number of blocks a stream has been active
+(define-read-only (calculate-block-delta (timeframe {
+    start-block: uint,
+    stop-block: uint,
+}))
+    (let (
+            (start-block (get start-block timeframe))
+            (stop-block (get stop-block timeframe))
+            (delta (if (<= stacks-block-height start-block)
+                ;; then
+                u0
+                ;; else
+                (if (< stacks-block-height stop-block)
+                    ;; then
+                    (- stacks-block-height start-block)
+                    ;; else
+                    (- stop-block start-block)
+                )
+            ))
+        )
+        delta
+    )
+)
+
+;; Check balance for a party involved in a stream
+(define-read-only (balance-of
+        (stream-id uint)
+        (who principal)
+    )
+    (let (
+            (stream (unwrap! (map-get? streams stream-id) u0))
+            (block-delta (calculate-block-delta (get timeframe stream)))
+            (recipient-balance (* block-delta (get payment-per-block stream)))
+        )
+        (if (is-eq who (get recipient stream))
+            (- recipient-balance (get withdrawn-balance stream))
+            (if (is-eq who (get sender stream))
+                (- (get balance stream) recipient-balance)
+                u0
+            )
+        )
+    )
+)

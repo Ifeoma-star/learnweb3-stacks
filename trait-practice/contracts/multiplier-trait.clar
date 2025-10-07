@@ -6,8 +6,9 @@
 ;; Define the multiplier trait
 ;; Any contract implementing this trait must have a multiply function
 ;; that takes two uints and returns a response with a uint or error
-(define-trait multiplier
-    (
-        (multiply (uint uint) (response uint uint))
+(define-trait multiplier (
+    (multiply
+        (uint uint)
+        (response uint uint)
     )
-)
+))

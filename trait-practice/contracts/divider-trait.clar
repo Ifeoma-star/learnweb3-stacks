@@ -6,8 +6,9 @@
 ;; Define the divider trait
 ;; Any contract implementing this trait must have a divide function
 ;; that takes two uints and returns a response with a uint or error
-(define-trait divider
-    (
-        (divide (uint uint) (response uint uint))
+(define-trait divider (
+    (divide
+        (uint uint)
+        (response uint uint)
     )
-)
+))

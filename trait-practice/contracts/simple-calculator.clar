@@ -4,7 +4,10 @@
 ;; description: This contract demonstrates implementing a trait by providing a multiply function
 
 ;; Implement the multiply function as required by the multiplier trait
-(define-read-only (multiply (a uint) (b uint))
+(define-read-only (multiply
+        (a uint)
+        (b uint)
+    )
     (ok (* a b))
 )
 

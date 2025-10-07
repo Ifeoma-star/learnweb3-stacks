@@ -25,3 +25,46 @@
         },
     }
 )
+
+;; Create a new stream
+(define-public (stream-to
+        (recipient principal)
+        (initial-balance uint)
+        (timeframe {
+            start-block: uint,
+            stop-block: uint,
+        })
+        (payment-per-block uint)
+    )
+    (let (
+            (stream {
+                sender: contract-caller,
+                recipient: recipient,
+                balance: initial-balance,
+                withdrawn-balance: u0,
+                payment-per-block: payment-per-block,
+                timeframe: timeframe,
+            })
+            (current-stream-id (var-get latest-stream-id))
+        )
+        (try! (stx-transfer? initial-balance contract-caller (as-contract tx-sender)))
+        (map-set streams current-stream-id stream)
+        (var-set latest-stream-id (+ current-stream-id u1))
+        (ok current-stream-id)
+    )
+)
+
+;; Increase the locked STX balance for a stream
+(define-public (refuel
+        (stream-id uint)
+        (amount uint)
+    )
+    (let ((stream (unwrap! (map-get? streams stream-id) ERR_INVALID_STREAM_ID)))
+        (asserts! (is-eq contract-caller (get sender stream)) ERR_UNAUTHORIZED)
+        (try! (stx-transfer? amount contract-caller (as-contract tx-sender)))
+        (map-set streams stream-id
+            (merge stream { balance: (+ (get balance stream) amount) })
+        )
+        (ok amount)
+    )
+)

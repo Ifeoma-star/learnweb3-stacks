@@ -5,6 +5,11 @@ authors = []
 telemetry = true
 cache_dir = './.cache'
 requirements = []
+[contracts.advanced-calculator]
+path = 'contracts/advanced-calculator.clar'
+clarity_version = 3
+epoch = 3.1
+
 [contracts.divider-trait]
 path = 'contracts/divider-trait.clar'
 clarity_version = 3
